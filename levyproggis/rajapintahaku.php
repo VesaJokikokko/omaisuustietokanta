@@ -49,22 +49,44 @@ foreach ($result as $key => $value) {
                  "explaintext"=>"1",
                  "format"=>"json"  
                  ];
+                break;
             }
-                else{
-                echo "je";
+            else{
+               $parametrit = [
+                 "action" => "query",
+                 "prop" => "extracts",
+                 "exsentences" => "10",  
+                 "exlimits" => "1",
+                 "titles" => $etsiSivu,
+                 "explaintext"=>"1",
+                 "format"=>"json"  
+                 ];
+            }
             }
             
             
             
             }
             }
-}
-/*
-if ($result['opensearch']['search'][0]['title'] == $etsiSivu){
-    echo("Your search page '" . $etsiSivu . "' exists on English Wikipedia" . "\n" );
-}
-else{
-    echo "Haku ei tuottanut tuloksia";
-}
- * *
- */
+$url = $alku . "?" . http_build_query( $parametrit );
+//echo $url;
+$ch2 = curl_init( $url );
+
+$certificate2 = "C:\sertit\cacert.pem";
+curl_setopt($ch2, CURLOPT_CAINFO, $certificate2);
+curl_setopt($ch2, CURLOPT_CAPATH, $certificate2);
+curl_setopt( $ch2, CURLOPT_RETURNTRANSFER, true );
+$output2 = curl_exec( $ch2 );
+$error2 = curl_error($ch2);
+echo $error2;
+curl_close( $ch2 );
+//var_dump($output);
+$result2 = json_decode( $output2, true );
+echo "<pre>";
+   print_r($result2);
+echo "</pre>";
+
+    foreach ($result2['query']['pages'] as $key => $value){
+        echo $value['extract'];
+    }
+    
