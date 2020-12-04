@@ -2,15 +2,17 @@
 //phpinfo();
 
 $etsiSivu = $_GET['nimi'];
-
+echo 'lll'.strlen($etsiSivu);
 $alku = "https://en.wikipedia.org/w/api.php";
-$params = [
-    "action" => "query",
-    "list" => "search",
-    "srsearch" => $etsiSivu,
+$wiki_alku = "https://en.wikipedia.org/wiki/";
+$parametrit = [
+    "action" => "opensearch",
+    "search" => $etsiSivu,
+    "limit" => "max",
+    "namespace" => "0",
     "format" => "json"
 ];
-$url = $alku . "?" . http_build_query( $params );
+$url = $alku . "?" . http_build_query( $parametrit );
 //echo $url;
 $ch = curl_init( $url );
 
@@ -24,12 +26,45 @@ echo $error;
 curl_close( $ch );
 //var_dump($output);
 $result = json_decode( $output, true );
-var_dump($result);
+echo "<pre>";
+   print_r($result);
+echo "</pre>";
+$i = 0;
+echo is_array($result);
 
-
-/*if ($result['opensearch']['search'][0]['title'] == $etsiSivu){
+foreach ($result as $key => $value) {
+   /* echo $key;
+    echo "<br>";*/
+    if (is_array($value)){
+    foreach ($value as $avain => $arvo) {
+         // echo $avain.' '.strpos($arvo,'_(band)');
+            if (strpos($arvo,'_(band)')){
+              
+                $parametrit = [
+                 "action" => "query",
+                 "prop" => "extracts",
+                 "exsentences" => "10",  
+                 "exlimits" => "1",
+                 "titles" => $etsiSivu."_(band)",
+                 "explaintext"=>"1",
+                 "format"=>"json"  
+                 ];
+            }
+                else{
+                echo "je";
+            }
+            
+            
+            
+            }
+            }
+}
+/*
+if ($result['opensearch']['search'][0]['title'] == $etsiSivu){
     echo("Your search page '" . $etsiSivu . "' exists on English Wikipedia" . "\n" );
 }
 else{
-    echo "Burn in hell";
-}*/
+    echo "Haku ei tuottanut tuloksia";
+}
+ * *
+ */

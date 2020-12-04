@@ -26,7 +26,7 @@ class sql_lauseet {
   
         }
         public function tulostaNimikkeet(){
-            $sql = "SELECT t.nimi, n.nimike_nimi, n.tyyppi FROM tekija t, nimike n ORDER BY t.nimi, n.nimike_nimi ASC";
+            $sql = "SELECT t.nimi, n.nimike_nimi, n.tyyppi FROM tekija t, nimike n WHERE n.esittaja_id = t.id ORDER BY t.nimi, n.nimike_nimi ASC";
             return $this->_ajaArray($sql);
         }
 
